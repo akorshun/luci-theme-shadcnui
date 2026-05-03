@@ -18,6 +18,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-24.04
+    permissions:
+      contents: write   # required by softprops/action-gh-release to create the release
     strategy:
       fail-fast: false
       matrix:
