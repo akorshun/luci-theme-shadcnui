@@ -1,0 +1,99 @@
+name: Build & Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+# Note: this repository contains TWO packages:
+#   ./luci-theme-shadcnui          — the theme itself (PKGARCH=all)
+#   ./luci-app-shadcnui-config     — the config UI (PKGARCH=all)
+#
+# Both are PKGARCH=all so a single SDK run produces .apk packages that work
+# on every OpenWrt 25.12 target. We pick rockchip/armv8 only because the SDK
+# has to come from somewhere; the resulting all-arch packages are identical
+# regardless of the SDK target chosen.
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: rockchip-armv8
+            sdk_url: https://downloads.openwrt.org/releases/25.12.2/targets/rockchip/armv8/openwrt-sdk-25.12.2-rockchip-armv8_gcc-14.3.0_musl.Linux-x86_64.tar.zst
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install SDK prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential ccache ecj fastjar file g++ gawk gettext git \
+            java-propose-classpath libelf-dev libncurses5-dev libncursesw5-dev \
+            libssl-dev python3 python3-distutils python3-setuptools python3-dev \
+            rsync subversion swig time xsltproc zlib1g-dev zstd unzip wget curl
+
+      - name: Download SDK
+        run: |
+          mkdir -p /tmp/sdk && cd /tmp/sdk
+          curl -fsSL -o sdk.tar.zst "${{ matrix.sdk_url }}"
+          tar --use-compress-program=unzstd -xf sdk.tar.zst
+          mv openwrt-sdk-* sdk
+          ls sdk/
+
+      - name: Stage packages into SDK feed
+        run: |
+          SDK=/tmp/sdk/sdk
+          mkdir -p "$SDK/package/luci-theme-shadcnui"
+          mkdir -p "$SDK/package/luci-app-shadcnui-config"
+          cp -a luci-theme-shadcnui/.       "$SDK/package/luci-theme-shadcnui/"
+          cp -a luci-app-shadcnui-config/.  "$SDK/package/luci-app-shadcnui-config/"
+
+      - name: Update + install LuCI feed
+        working-directory: /tmp/sdk/sdk
+        run: |
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
+
+      - name: Configure
+        working-directory: /tmp/sdk/sdk
+        run: |
+          make defconfig
+          # opt-in our two packages as built-into-feed (M = build .apk only)
+          {
+            echo 'CONFIG_PACKAGE_luci-theme-shadcnui=m'
+            echo 'CONFIG_PACKAGE_luci-app-shadcnui-config=m'
+          } >> .config
+          make defconfig
+
+      - name: Build packages
+        working-directory: /tmp/sdk/sdk
+        run: |
+          make package/luci-theme-shadcnui/compile      V=s -j$(nproc)
+          make package/luci-app-shadcnui-config/compile V=s -j$(nproc)
+
+      - name: Collect artifacts
+        run: |
+          mkdir -p artifacts
+          find /tmp/sdk/sdk/bin -type f \( -name '*.apk' -o -name '*.ipk' \) \
+            \( -name 'luci-theme-shadcnui*' -o -name 'luci-app-shadcnui-config*' \) \
+            -exec cp -v {} artifacts/ \;
+          ls -la artifacts/
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: packages-${{ matrix.target }}
+          path: artifacts/*
+
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/*
+          generate_release_notes: true

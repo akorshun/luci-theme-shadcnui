@@ -1,0 +1,17 @@
+# build outputs
+*.apk
+*.ipk
+bin/
+build_dir/
+staging_dir/
+tmp/
+
+# editor / OS
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# local SDK staging
+sdk/
