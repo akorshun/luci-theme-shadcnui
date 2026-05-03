@@ -1,0 +1,13 @@
+{%
+/*
+ * luci-theme-shadcnui — footer.ut
+ */
+%}
+{% if (length(dispatcher.context.path) == 0): %}
+  </main>
+{% else: %}
+    </main>
+  </div>
+{% endif %}
+</body>
+</html>
