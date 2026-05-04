@@ -723,43 +723,51 @@ table.cbi-section-table {
 
 /* ============================================================
  * LOGIN / SYSAUTH PAGE
+ * Our overridden /usr/share/ucode/luci/template/sysauth.ut renders:
+ *   <body class="lang_xx sysauth">
+ *     <main id="login-root">
+ *       <div class="login-bg" style="background-image:url(...)"></div>  (optional)
+ *       <div class="sysauth-card">
+ *         <div class="sysauth-brand">…</div>
+ *         <form>
+ *           <div class="alert-message error">…</div>           (only on failure)
+ *           <div class="cbi-value"><label/><input/></div>      (× 2)
+ *           <div class="cbi-page-actions"><input submit/></div>
+ *         </form>
+ *       </div>
+ *     </main>
+ *   </body>
  * ============================================================ */
 body.sysauth {
   margin: 0;
-  display: flex;
-  flex-direction: column;
   min-height: 100vh;
   background: hsl(var(--background));
   color: hsl(var(--foreground));
 }
 
-body.sysauth::before {
-  content: "";
+#login-root {
+  position: relative;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem 1rem;
+}
+
+.login-bg {
   position: fixed;
   inset: 0;
-  z-index: -2;
-  background-image: var(--login-bg, none);
+  z-index: -1;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
-
-body.sysauth::after {
+.login-bg::after {
   content: "";
-  position: fixed;
+  position: absolute;
   inset: 0;
-  z-index: -1;
-  background: hsl(var(--background) / 0.85);
+  background: hsl(var(--background) / 0.7);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-}
-
-#login-root {
-  display: grid;
-  place-items: center;
-  padding: 2rem 1rem;
-  flex: 1;
-  width: 100%;
 }
 
 .sysauth-card {
@@ -808,37 +816,7 @@ body.sysauth::after {
   line-height: 1.4;
 }
 
-/* The runtime sysauth.ut renders a <form><div class="cbi-map"> structure
-   inside our card. Reskin those LuCI elements to look at home in the card. */
-.sysauth-card form {
-  margin: 0;
-}
-
-.sysauth-card .cbi-map {
-  margin: 0;
-}
-
-.sysauth-card .cbi-map h2,
-.sysauth-card .cbi-map > h2[name="content"] {
-  display: none;          /* "Authorization Required" — redundant with our brand */
-}
-
-.sysauth-card .cbi-map-descr {
-  display: none;          /* "Please enter your username and password." — same */
-}
-
-.sysauth-card .cbi-section {
-  background: transparent;
-  border: 0;
-  padding: 0;
-  margin: 0;
-  box-shadow: none;
-}
-
-.sysauth-card .cbi-section-node {
-  display: grid;
-  gap: 0.875rem;
-}
+.sysauth-card form { margin: 0; }
 
 .sysauth-card .cbi-value {
   display: grid;
@@ -846,18 +824,17 @@ body.sysauth::after {
   gap: 0.375rem;
   padding: 0;
   border: 0;
+  margin-bottom: 0.875rem;
 }
+.sysauth-card .cbi-value:last-of-type { margin-bottom: 0; }
 
-.sysauth-card .cbi-value-title {
-  padding: 0;
+.sysauth-card .cbi-value label {
   font-size: 0.8125rem;
   font-weight: 500;
   color: hsl(var(--foreground));
 }
 
-.sysauth-card .cbi-value-field input {
-  width: 100%;
-}
+.sysauth-card .cbi-value input { width: 100%; }
 
 .sysauth-card .cbi-page-actions {
   margin-top: 1.5rem;
@@ -886,64 +863,46 @@ body.sysauth::after {
   border-top: 1px solid hsl(var(--border));
 }
 
-.spinning {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border: 2px solid hsl(var(--muted));
-  border-top-color: hsl(var(--primary));
-  border-radius: 50%;
-  animation: shadcnui-spin 0.7s linear infinite;
-}
-@keyframes shadcnui-spin {
-  to { transform: rotate(360deg); }
-}
-
 /* ============================================================
- * Fullscreen page-loading overlay
- * LuCI shows a centered text + spinner block while a view loads. We hide
- * the text content and only show a clean spinner, replacing the old look.
+ * Loading spinner — used by LuCI cbi.js / luci.js as <div class="spinning">.
+ * The element contains a text label like "Loading view…"; we want a small
+ * spinning ring on the left and the text right next to it (mirrors how the
+ * stock bootstrap theme renders it).
  * ============================================================ */
-body > .spinning,
-body > .modal,
-body > #modal_overlay,
-.cbi-modal,
-.alert-message.notice.fade {
-  /* These wrappers may contain a <p>"Loading view…"</p> + a spinner. We
-     keep the wrapper visible (it provides the dimming/centering) but blank
-     out its text-bearing children. The wrapper itself gets its own ring
-     spinner via ::after. */
-}
-
-body.spinning,
-body > #modal_overlay {
+.spinning {
   position: relative;
+  padding-left: 26px;
+  display: inline-block;
+  line-height: 20px;
+  color: hsl(var(--muted-foreground));
 }
 
-/* Hide everything inside known fullscreen-loader containers... */
-body > .spinning > *,
-body > .modal > *,
-body > #modal_overlay > * .alert-message > *,
-body > #modal_overlay > .modal > * {
-  visibility: hidden;
-}
-
-/* ...and place a clean spinner in their center instead. */
-body > .spinning::before,
-body > .modal::before,
-body > #modal_overlay::before {
+.spinning::before {
   content: "";
   position: absolute;
   top: 50%;
-  left: 50%;
-  width: 32px;
-  height: 32px;
-  margin: -16px 0 0 -16px;
-  border: 3px solid hsl(var(--muted));
+  left: 0;
+  width: 16px;
+  height: 16px;
+  margin-top: -8px;
+  border: 2px solid hsl(var(--border));
   border-top-color: hsl(var(--primary));
   border-radius: 50%;
   animation: shadcnui-spin 0.7s linear infinite;
-  visibility: visible;
+}
+
+/* When LuCI shows a full-page loader (`<div id="view"><div class="spinning">…`)
+   it centers it via `display: table; margin: 15vh auto`. Honor that by giving
+   the wrapper some breathing room. */
+#view > .spinning:first-child {
+  display: block;
+  margin: 15vh auto 0;
+  text-align: left;
+  font-size: 0.9375rem;
+}
+
+@keyframes shadcnui-spin {
+  to { transform: rotate(360deg); }
 }
 
 /* H1/H2 headings of pages */
