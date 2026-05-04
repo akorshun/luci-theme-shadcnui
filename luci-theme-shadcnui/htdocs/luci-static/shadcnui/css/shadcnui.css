@@ -874,8 +874,8 @@ body.sysauth {
 .cbi-progressbar {
   position: relative;
   height: 8px;
-  margin-top: 1.5em;     /* leave room for the title pseudo-element */
-  margin-bottom: 0.25em;
+  margin-top: 2em;       /* leave room for the title pseudo-element */
+  margin-bottom: 0.75em;
   min-width: 120px;
   width: 100%;
 }
@@ -902,7 +902,7 @@ body.sysauth {
 .cbi-progressbar::before {
   content: attr(title);
   position: absolute;
-  top: -1.4em;
+  top: -1.75em;
   left: 0;
   right: 0;
   font-size: 0.8125rem;
@@ -917,7 +917,7 @@ body.sysauth {
 td > .cbi-progressbar,
 .td > .cbi-progressbar,
 .cbi-value-field > .cbi-progressbar {
-  margin-top: 1.4em;
+  margin-top: 2em;
 }
 
 
