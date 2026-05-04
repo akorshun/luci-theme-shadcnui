@@ -1,13 +1,11 @@
-{%
-/*
- * luci-theme-shadcnui — footer.ut
- */
-%}
-{% if (length(dispatcher.context.path) == 0): %}
-  </main>
-{% else %}
-    </main>
-  </div>
+{#
+ luci-theme-shadcnui — footer.ut
+-#}
+
+{% if (!blank_page): %}
+	</main>
+</div>
+<script>L.require('menu-shadcnui')</script>
 {% endif %}
 </body>
 </html>
