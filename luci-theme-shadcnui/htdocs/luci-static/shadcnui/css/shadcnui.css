@@ -231,6 +231,8 @@ hr {
   height: 16px;
   flex-shrink: 0;
   opacity: 0.85;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .sidebar-toggle .chevron {
