@@ -106,7 +106,18 @@ jobs:
 
       - name: Release
         if: startsWith(github.ref, 'refs/tags/v')
-        uses: softprops/action-gh-release@v3
-        with:
-          files: artifacts/*
-          generate_release_notes: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+
+          # Create release if it doesn't exist yet (idempotent)
+          if ! gh release view "$TAG" >/dev/null 2>&1; then
+            gh release create "$TAG" \
+              --title  "$TAG" \
+              --notes  "Automated build for $TAG" \
+              --verify-tag
+          fi
+
+          # Upload all artifacts; --clobber overwrites if a previous run partially uploaded
+          gh release upload "$TAG" artifacts/* --clobber
