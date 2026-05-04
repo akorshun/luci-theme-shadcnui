@@ -27,11 +27,11 @@
 	if (bg_url)
 		style_overrides += `--login-bg:url('${replace(bg_url, "'", "\\'")}');`;
 
-	/* Detect login page: blank_page is set by sysauth in some LuCI versions,
-	   but it's also reliable to check that ctx.request_path is empty (no
-	   menu node was dispatched) — that only happens at /cgi-bin/luci/ before
-	   authentication. */
-	const is_login = blank_page || !length(ctx.request_path);
+	/* Detect login page reliably: 'dispatched' (the resolved menu node) is
+	   null only at the unauthenticated /cgi-bin/luci/ entry point — every
+	   real LuCI page sets it to a non-null object. Older runtimes also set
+	   blank_page=true on sysauth, so we honor that as a fallback. */
+	const is_login = blank_page || !dispatched;
 
 	http.prepare_content('text/html; charset=UTF-8');
 -%}

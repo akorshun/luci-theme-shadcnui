@@ -3,7 +3,7 @@
 -#}
 
 {%
-	const is_login = blank_page || !length(ctx.request_path);
+	const is_login = blank_page || !dispatched;
 %}
 
 {% if (is_login): %}
