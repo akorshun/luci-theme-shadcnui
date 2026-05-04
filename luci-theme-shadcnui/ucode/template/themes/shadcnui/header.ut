@@ -2,175 +2,174 @@
 /*
  * luci-theme-shadcnui — header.ut
  *
- * This template is included by /usr/share/ucode/luci/template.uc on every
- * LuCI page. The runtime exposes:
- *   - dispatcher.menu_tree(node)  : returns sorted menu children
+ * Included by /usr/share/ucode/luci/template.uc on every LuCI page.
+ * Runtime exposes:
+ *   - dispatcher.menu_tree(node)  : sorted menu children
  *   - dispatcher.context.path     : list of current path segments
  *   - dispatcher.build_url(path)  : produces a relative URL
- *   - tree                        : root menu node from /usr/share/luci/menu.d
- *   - L                           : LuCI runtime helpers
- *   - lang(s)                     : i18n
- *   - boardinfo                   : ubus system board cache
+ *   - tree                        : root menu node
+ *   - lang(s), striptags(s), media, resource, token, boardinfo
  *
- * The sidebar walks two levels of the menu tree: top-level groups (System,
- * Network, Services, Status…) and their children. Deeper levels open as
- * collapsible sub-sections, keeping the same Argon-style hierarchy.
+ * Ucode template syntax reminder:
+ *   {% if (x): %} ... {% else %} ... {% endif %}        (no colon after else!)
+ *   {% for (...): %} ... {% endfor %}                    (no semicolons!)
  */
 
-import { uci as ucibus } from 'uci';
+import { cursor as ucicursor } from 'uci';
 
-let cur = ucibus.cursor();
+let cur = ucicursor();
 cur.load('shadcnui');
 
-let mode      = cur.get('shadcnui', 'main', 'mode')      || 'system';
-let base      = cur.get('shadcnui', 'main', 'base')      || 'zinc';
-let accent    = cur.get('shadcnui', 'main', 'accent')    || '';     // "240 5.9% 10%"
-let bg_url    = cur.get('shadcnui', 'main', 'bg_url')    || '';
-let radius    = cur.get('shadcnui', 'main', 'radius')    || '0.5rem';
-let resolved  = (mode == 'dark') ? 'dark' : (mode == 'light' ? 'light' : 'light');
+let mode      = cur.get('shadcnui', 'main', 'mode')   || 'system';
+let base      = cur.get('shadcnui', 'main', 'base')   || 'zinc';
+let accent    = cur.get('shadcnui', 'main', 'accent') || '';
+let bg_url    = cur.get('shadcnui', 'main', 'bg_url') || '';
+let radius    = cur.get('shadcnui', 'main', 'radius') || '0.5rem';
+
+/* mode == 'system' is resolved client-side by theme.js; pick 'light' as the
+   server-side default to avoid a flash of wrong theme. */
+let resolved = (mode == 'dark') ? 'dark' : 'light';
+
+let on_login = (length(dispatcher.context.path) == 0);
+let style_overrides = '';
+if (accent)
+	style_overrides += '--primary:' + accent + ';--ring:' + accent + ';';
+if (radius != '0.5rem')
+	style_overrides += '--radius:' + radius + ';';
+if (bg_url)
+	style_overrides += "--login-bg:url('" + replace(bg_url, "'", "\\'") + "');";
+
+let hostname = boardinfo.hostname || 'OpenWrt';
 %}<!DOCTYPE html>
 <html lang="{{ lang('lang_iso') || 'en' }}"
       data-base="{{ base }}"
       data-mode="{{ mode }}"
       data-theme="{{ resolved }}"
-      style="{% if (accent): %}--primary:{{ accent }};--ring:{{ accent }};{% endif %}{% if (radius != '0.5rem'): %}--radius:{{ radius }};{% endif %}{% if (bg_url): %}--login-bg:url('{{ replace(bg_url, "'", "\\'") }}');{% endif %}">
+      style="{{ style_overrides }}">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="color-scheme" content="light dark" />
-  <title>{{ striptags(boardinfo.hostname || 'OpenWrt') }} — LuCI</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+	<meta name="color-scheme" content="light dark" />
+	<title>{{ striptags(hostname) }} — LuCI</title>
 
-  <link rel="icon" type="image/svg+xml"
-        href="{{ media }}/icons/favicon.svg" />
-  <link rel="stylesheet" href="{{ media }}/css/shadcnui.css" />
-  <script src="{{ resource }}/cbi.js"></script>
-  <script src="{{ resource }}/xhr.js"></script>
-  <script src="{{ resource }}/luci.js"></script>
-  <script src="{{ media }}/js/theme.js" defer></script>
-  <script src="{{ media }}/js/sidebar.js" defer></script>
+	<link rel="icon" type="image/svg+xml" href="{{ media }}/icons/favicon.svg" />
+	<link rel="stylesheet" href="{{ media }}/css/shadcnui.css" />
+	<script src="{{ resource }}/cbi.js"></script>
+	<script src="{{ resource }}/xhr.js"></script>
+	<script src="{{ resource }}/luci.js"></script>
+	<script src="{{ media }}/js/theme.js" defer></script>
+	<script src="{{ media }}/js/sidebar.js" defer></script>
 </head>
-<body class="lang_{{ lang('lang_iso') || 'en' }}{% if (length(dispatcher.context.path) == 0): %} sysauth{% endif %}">
+<body class="lang_{{ lang('lang_iso') || 'en' }}{% if (on_login): %} sysauth{% endif %}">
 
-{% if (length(dispatcher.context.path) == 0): %}
-  {# sysauth.ut handles the login layout — fall through #}
-  <main id="login-root">
-{% else: %}
-  <div id="shadcn-app" data-sidebar="expanded">
+{% if (on_login): %}
+	<main id="login-root">
+{% else %}
+	<div id="shadcn-app" data-sidebar="expanded">
 
-    {# ------------------ SIDEBAR ------------------ #}
-    <aside id="shadcn-sidebar" aria-label="Main navigation">
-      <div class="sidebar-header">
-        <div class="logo" aria-hidden="true">
-          {{ substr(uc(boardinfo.hostname || 'OW'), 0, 2) }}
-        </div>
-        <span>{{ striptags(boardinfo.hostname || 'OpenWrt') }}</span>
-      </div>
+		<aside id="shadcn-sidebar" aria-label="Main navigation">
+			<div class="sidebar-header">
+				<div class="logo" aria-hidden="true">{{ substr(uc(hostname), 0, 2) }}</div>
+				<span>{{ striptags(hostname) }}</span>
+			</div>
 
-      <nav class="sidebar-nav" role="navigation">
-      {%
-        let groups = dispatcher.menu_tree(tree);
-        for (let g in groups):
-          let g_url   = dispatcher.build_url(g.path);
-          let g_label = striptags(g.title);
-          let kids    = g.children ? dispatcher.menu_tree(g) : [];
-          let active_group = (length(dispatcher.context.path) > 0
-                             && dispatcher.context.path[0] == g.name);
-      %}
-        <div class="sidebar-section" data-open="{{ active_group ? 'true' : 'false' }}">
-        {% if (length(kids) > 0): %}
-          <button class="sidebar-toggle" type="button">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="9"/>
-            </svg>
-            <span>{{ g_label }}</span>
-            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="9 18 15 12 9 6"/>
-            </svg>
-          </button>
-          <div class="sidebar-children">
-          {% for (let c in kids): %}
-            <a class="sidebar-link" href="{{ dispatcher.build_url(c.path) }}">
-              <span>{{ striptags(c.title) }}</span>
-            </a>
-          {% endfor %}
-          </div>
-        {% else: %}
-          <a class="sidebar-link" href="{{ g_url }}">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="9"/>
-            </svg>
-            <span>{{ g_label }}</span>
-          </a>
-        {% endif %}
-        </div>
-      {% endfor %}
-      </nav>
+			<nav class="sidebar-nav" role="navigation">
+			{%
+				let groups = dispatcher.menu_tree(tree);
+				for (let g in groups) {
+					let g_url   = dispatcher.build_url(g.path);
+					let g_label = striptags(g.title);
+					let kids    = g.children ? dispatcher.menu_tree(g) : [];
+					let active_group = (length(dispatcher.context.path) > 0
+					                    && dispatcher.context.path[0] == g.name);
+			%}
+				<div class="sidebar-section" data-open="{{ active_group ? 'true' : 'false' }}">
+				{% if (length(kids) > 0): %}
+					<button class="sidebar-toggle" type="button">
+						<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+						     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<circle cx="12" cy="12" r="9"/>
+						</svg>
+						<span>{{ g_label }}</span>
+						<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+						     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<polyline points="9 18 15 12 9 6"/>
+						</svg>
+					</button>
+					<div class="sidebar-children">
+					{% for (let c in kids): %}
+						<a class="sidebar-link" href="{{ dispatcher.build_url(c.path) }}">
+							<span>{{ striptags(c.title) }}</span>
+						</a>
+					{% endfor %}
+					</div>
+				{% else %}
+					<a class="sidebar-link" href="{{ g_url }}">
+						<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+						     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<circle cx="12" cy="12" r="9"/>
+						</svg>
+						<span>{{ g_label }}</span>
+					</a>
+				{% endif %}
+				</div>
+			{% } %}
+			</nav>
 
-      <div class="sidebar-footer">
-        shadcnui · LuCI
-      </div>
-    </aside>
+			<div class="sidebar-footer">shadcnui · LuCI</div>
+		</aside>
 
-    {# ------------------ TOPBAR ------------------ #}
-    <header id="shadcn-topbar">
-      <button class="topbar-toggle" id="shadcn-sidebar-toggle"
-              type="button" aria-label="{{ lang('Toggle sidebar') }}">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
-             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="3" y1="6"  x2="21" y2="6"/>
-          <line x1="3" y1="12" x2="21" y2="12"/>
-          <line x1="3" y1="18" x2="21" y2="18"/>
-        </svg>
-      </button>
+		<header id="shadcn-topbar">
+			<button class="topbar-toggle" id="shadcn-sidebar-toggle"
+			        type="button" aria-label="{{ lang('Toggle sidebar') }}">
+				<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+				     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<line x1="3" y1="6"  x2="21" y2="6"/>
+					<line x1="3" y1="12" x2="21" y2="12"/>
+					<line x1="3" y1="18" x2="21" y2="18"/>
+				</svg>
+			</button>
 
-      <div class="topbar-breadcrumb">
-      {%
-        let crumbs = [];
-        let acc = [];
-        let walk = tree;
-        for (let seg in dispatcher.context.path):
-          push(acc, seg);
-          if (walk && walk.children && walk.children[seg]):
-            walk = walk.children[seg];
-            push(crumbs, { title: walk.title, path: [...acc] });
-          endif;
-        endfor;
-      %}
-      {% for (let i = 0; i < length(crumbs); i++): %}
-        {% if (i > 0): %}<span class="crumb-sep">/</span>{% endif %}
-        {% if (i == length(crumbs) - 1): %}
-          <span class="crumb-current">{{ striptags(crumbs[i].title) }}</span>
-        {% else: %}
-          <a href="{{ dispatcher.build_url(crumbs[i].path) }}">
-            {{ striptags(crumbs[i].title) }}
-          </a>
-        {% endif %}
-      {% endfor %}
-      </div>
+			<div class="topbar-breadcrumb">
+			{%
+				let crumbs = [];
+				let acc = [];
+				let walk = tree;
+				for (let seg in dispatcher.context.path) {
+					push(acc, seg);
+					if (walk && walk.children && walk.children[seg]) {
+						walk = walk.children[seg];
+						push(crumbs, { title: walk.title, path: [...acc] });
+					}
+				}
+			%}
+			{% for (let i = 0; i < length(crumbs); i++): %}
+				{% if (i > 0): %}<span class="crumb-sep">/</span>{% endif %}
+				{% if (i == length(crumbs) - 1): %}
+					<span class="crumb-current">{{ striptags(crumbs[i].title) }}</span>
+				{% else %}
+					<a href="{{ dispatcher.build_url(crumbs[i].path) }}">{{ striptags(crumbs[i].title) }}</a>
+				{% endif %}
+			{% endfor %}
+			</div>
 
-      <div class="topbar-actions">
-        <a class="btn btn-ghost btn-sm"
-           href="{{ dispatcher.build_url(['admin','system','admin']) }}"
-           title="{{ lang('Account') }}">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
-          </svg>
-        </a>
-        <form action="{{ dispatcher.build_url(['admin','logout']) }}"
-              method="post" style="display:inline">
-          <input type="hidden" name="token" value="{{ token }}"/>
-          <button class="btn btn-outline btn-sm" type="submit">
-            {{ lang('Logout') }}
-          </button>
-        </form>
-      </div>
-    </header>
+			<div class="topbar-actions">
+				<a class="btn btn-ghost btn-sm"
+				   href="{{ dispatcher.build_url(['admin','system','admin']) }}"
+				   title="{{ lang('Account') }}">
+					<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+					     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+						<circle cx="12" cy="7" r="4"/>
+					</svg>
+				</a>
+				<form action="{{ dispatcher.build_url(['admin','logout']) }}"
+				      method="post" style="display:inline">
+					<input type="hidden" name="token" value="{{ token }}"/>
+					<button class="btn btn-outline btn-sm" type="submit">{{ lang('Logout') }}</button>
+				</form>
+			</div>
+		</header>
 
-    {# ------------------ MAIN ------------------ #}
-    <main id="shadcn-main">
+		<main id="shadcn-main">
 {% endif %}

@@ -5,7 +5,7 @@
 %}
 {% if (length(dispatcher.context.path) == 0): %}
   </main>
-{% else: %}
+{% else %}
     </main>
   </div>
 {% endif %}
