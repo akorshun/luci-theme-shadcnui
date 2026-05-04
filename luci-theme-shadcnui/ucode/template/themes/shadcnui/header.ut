@@ -27,15 +27,15 @@
 	if (bg_url)
 		style_overrides += `--login-bg:url('${replace(bg_url, "'", "\\'")}');`;
 
-	/* Detect login page reliably: 'dispatched' (the resolved menu node) is
-	   null only at the unauthenticated /cgi-bin/luci/ entry point — every
-	   real LuCI page sets it to a non-null object. Older runtimes also set
-	   blank_page=true on sysauth, so we honor that as a fallback. */
-	const is_login = blank_page || !dispatched;
+	/* Detect login page. authuser is set by the dispatcher only after
+	   successful authentication. Before that it's empty/undefined regardless
+	   of LuCI version, which makes it the most reliable login indicator. */
+	const is_login = !authuser;
 
 	http.prepare_content('text/html; charset=UTF-8');
 -%}
 <!DOCTYPE html>
+<!-- shadcnui debug: is_login={{ is_login ? '1' : '0' }} authuser="{{ authuser ?? 'UNDEF' }}" node={{ node ? '1' : '0' }} dispatched={{ dispatched ? '1' : '0' }} blank_page={{ blank_page ? '1' : '0' }} -->
 <html lang="{{ dispatcher.lang }}"
       data-base="{{ base }}"
       data-mode="{{ mode }}"

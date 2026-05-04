@@ -3,7 +3,7 @@
 -#}
 
 {%
-	const is_login = blank_page || !dispatched;
+	const is_login = !authuser;
 %}
 
 {% if (is_login): %}

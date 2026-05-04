@@ -899,6 +899,53 @@ body.sysauth::after {
   to { transform: rotate(360deg); }
 }
 
+/* ============================================================
+ * Fullscreen page-loading overlay
+ * LuCI shows a centered text + spinner block while a view loads. We hide
+ * the text content and only show a clean spinner, replacing the old look.
+ * ============================================================ */
+body > .spinning,
+body > .modal,
+body > #modal_overlay,
+.cbi-modal,
+.alert-message.notice.fade {
+  /* These wrappers may contain a <p>"Loading view…"</p> + a spinner. We
+     keep the wrapper visible (it provides the dimming/centering) but blank
+     out its text-bearing children. The wrapper itself gets its own ring
+     spinner via ::after. */
+}
+
+body.spinning,
+body > #modal_overlay {
+  position: relative;
+}
+
+/* Hide everything inside known fullscreen-loader containers... */
+body > .spinning > *,
+body > .modal > *,
+body > #modal_overlay > * .alert-message > *,
+body > #modal_overlay > .modal > * {
+  visibility: hidden;
+}
+
+/* ...and place a clean spinner in their center instead. */
+body > .spinning::before,
+body > .modal::before,
+body > #modal_overlay::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 32px;
+  height: 32px;
+  margin: -16px 0 0 -16px;
+  border: 3px solid hsl(var(--muted));
+  border-top-color: hsl(var(--primary));
+  border-radius: 50%;
+  animation: shadcnui-spin 0.7s linear infinite;
+  visibility: visible;
+}
+
 /* H1/H2 headings of pages */
 h1, h2 {
   font-weight: 600;
