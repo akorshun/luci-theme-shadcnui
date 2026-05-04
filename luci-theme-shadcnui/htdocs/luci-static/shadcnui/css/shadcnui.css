@@ -864,7 +864,54 @@ body.sysauth {
 }
 
 /* ============================================================
- * Loading spinner — used by LuCI cbi.js / luci.js as <div class="spinning">.
+ * Progress bar
+ * LuCI ships <div class="cbi-progressbar" title="…"><div style="width:N%"></div></div>
+ * The `title` attribute carries a human-readable label (e.g. "Used: 264 / 4096 MB (6%)")
+ * and the inner div carries the fill percentage as inline width.
+ * Style mirrors shadcn's <Progress /> component: small label above, thin track below.
+ * ============================================================ */
+.cbi-progressbar {
+  position: relative;
+  height: 8px;
+  background: hsl(var(--muted));
+  border-radius: 9999px;
+  overflow: hidden;
+  margin-top: 1.5em;     /* leave room for the title pseudo-element */
+  margin-bottom: 0.25em;
+  min-width: 120px;
+  width: 100%;
+}
+
+.cbi-progressbar > div {
+  background: hsl(var(--primary));
+  height: 100%;
+  border-radius: inherit;
+  transition: width 250ms ease-out;
+}
+
+/* Title text: positioned above the track using attr(title) */
+.cbi-progressbar::before {
+  content: attr(title);
+  position: absolute;
+  top: -1.4em;
+  left: 0;
+  right: 0;
+  font-size: 0.8125rem;
+  color: hsl(var(--foreground));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Inside cbi-section table cells, progress bars share the row with a label
+   on the left, so they should not push themselves down with extra top margin. */
+td > .cbi-progressbar,
+.td > .cbi-progressbar,
+.cbi-value-field > .cbi-progressbar {
+  margin-top: 1.4em;
+}
+
+
  * The element contains a text label like "Loading view…"; we want a small
  * spinning ring on the left and the text right next to it (mirrors how the
  * stock bootstrap theme renders it).
