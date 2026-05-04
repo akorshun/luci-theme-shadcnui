@@ -870,23 +870,32 @@ body.sysauth {
  * and the inner div carries the fill percentage as inline width.
  * Style mirrors shadcn's <Progress /> component: small label above, thin track below.
  * ============================================================ */
+/* Wrapper — no overflow:hidden here so ::before is not clipped */
 .cbi-progressbar {
   position: relative;
   height: 8px;
-  background: hsl(var(--muted));
-  border-radius: 9999px;
-  overflow: hidden;
   margin-top: 1.5em;     /* leave room for the title pseudo-element */
   margin-bottom: 0.25em;
   min-width: 120px;
   width: 100%;
 }
 
+/* The actual track — overflow:hidden lives here so the fill is clipped properly */
 .cbi-progressbar > div {
   background: hsl(var(--primary));
   height: 100%;
-  border-radius: inherit;
+  border-radius: 9999px;
   transition: width 250ms ease-out;
+}
+
+/* Track background rendered via ::after so we keep overflow:hidden off the wrapper */
+.cbi-progressbar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: hsl(var(--muted));
+  border-radius: 9999px;
+  z-index: -1;
 }
 
 /* Title text: positioned above the track using attr(title) */
@@ -912,6 +921,8 @@ td > .cbi-progressbar,
 }
 
 
+/* ============================================================
+ * SPINNER (.spinning)
  * The element contains a text label like "Loading view…"; we want a small
  * spinning ring on the left and the text right next to it (mirrors how the
  * stock bootstrap theme renders it).
