@@ -2,7 +2,14 @@
  luci-theme-shadcnui — footer.ut
 -#}
 
-{% if (!blank_page): %}
+{%
+	const is_login = blank_page || !length(ctx.request_path);
+%}
+
+{% if (is_login): %}
+	</div>
+</main>
+{% else %}
 	</main>
 </div>
 <script>L.require('menu-shadcnui')</script>

@@ -1,62 +1,46 @@
 /*
  * luci-theme-shadcnui — sidebar.js
- * Handles the collapsed/expanded sidebar state on desktop and the slide-in
- * drawer on mobile. Section toggle and active-link highlighting are owned by
- * menu-shadcnui.js because that module renders the menu DOM after this script
- * runs.
+ *
+ * Sidebar is always visible on desktop. On mobile (≤768px) the burger button
+ * in the topbar toggles a slide-in drawer; the dark overlay closes it.
+ *
+ * Section toggle and active-link highlighting are handled by menu-shadcnui.js
+ * because that module is responsible for rendering the menu DOM.
  */
 (function () {
 	'use strict';
 
-	var LS_KEY = 'shadcnui:sidebar';
 	var app = document.getElementById('shadcn-app');
-	if (!app) return;
-
-	function isMobile() { return window.matchMedia('(max-width: 768px)').matches; }
+	if (!app) return;     // login page or other unrelated layout
 
 	function applyState(state) {
+		// state: 'expanded' (mobile closed / desktop default) | 'open' (mobile drawer)
 		app.setAttribute('data-sidebar', state);
 	}
 
-	function loadState() {
-		try { return localStorage.getItem(LS_KEY) || 'expanded'; }
-		catch (e) { return 'expanded'; }
-	}
-	function saveState(s) {
-		try { localStorage.setItem(LS_KEY, s); } catch (e) {}
-	}
-
-	applyState(isMobile() ? 'closed' : loadState());
+	applyState('expanded');
 
 	var toggle = document.getElementById('shadcn-sidebar-toggle');
 	if (toggle) {
 		toggle.addEventListener('click', function (e) {
 			e.preventDefault();
 			var current = app.getAttribute('data-sidebar') || 'expanded';
-			var next;
-			if (isMobile()) {
-				next = (current === 'open') ? 'closed' : 'open';
-			} else {
-				next = (current === 'collapsed') ? 'expanded' : 'collapsed';
-				saveState(next);
-			}
-			applyState(next);
+			applyState(current === 'open' ? 'expanded' : 'open');
 		});
 	}
 
-	// Tap on overlay closes the mobile drawer.
 	var overlay = document.getElementById('shadcn-overlay');
 	if (overlay) {
 		overlay.addEventListener('click', function () {
-			applyState('closed');
+			applyState('expanded');
 		});
 	}
 
-	var lastMobile = isMobile();
+	// Close the drawer if the viewport grows past the breakpoint.
 	window.addEventListener('resize', function () {
-		var mob = isMobile();
-		if (mob === lastMobile) return;
-		lastMobile = mob;
-		applyState(mob ? 'closed' : loadState());
+		if (window.matchMedia('(min-width: 769px)').matches &&
+		    app.getAttribute('data-sidebar') === 'open') {
+			applyState('expanded');
+		}
 	});
 })();

@@ -27,6 +27,12 @@
 	if (bg_url)
 		style_overrides += `--login-bg:url('${replace(bg_url, "'", "\\'")}');`;
 
+	/* Detect login page: blank_page is set by sysauth in some LuCI versions,
+	   but it's also reliable to check that ctx.request_path is empty (no
+	   menu node was dispatched) — that only happens at /cgi-bin/luci/ before
+	   authentication. */
+	const is_login = blank_page || !length(ctx.request_path);
+
 	http.prepare_content('text/html; charset=UTF-8');
 -%}
 <!DOCTYPE html>
@@ -59,10 +65,20 @@
 	<script src="{{ media }}/js/sidebar.js" defer></script>
 </head>
 
-<body class="lang_{{ dispatcher.lang }} {{ entityencode(striptags(node?.title ?? ''), true) }}"
+<body class="lang_{{ dispatcher.lang }} {{ is_login ? 'sysauth' : entityencode(striptags(node?.title ?? ''), true) }}"
       data-page="{{ entityencode(join('-', ctx.request_path), true) }}">
 
-{% if (!blank_page): %}
+{% if (is_login): %}
+<main id="login-root">
+	<div class="sysauth-card">
+		<div class="sysauth-brand">
+			<div class="logo" aria-hidden="true">{{ substr(uc(boardinfo.hostname ?? 'OW'), 0, 2) }}</div>
+			<div>
+				<h2>{{ striptags(boardinfo.hostname ?? 'OpenWrt') }}</h2>
+				<p class="muted">{{ _('Please sign in to manage this device.') }}</p>
+			</div>
+		</div>
+{% else %}
 <div id="shadcn-app" data-sidebar="expanded">
 
 	<aside id="shadcn-sidebar" aria-label="Main navigation">
