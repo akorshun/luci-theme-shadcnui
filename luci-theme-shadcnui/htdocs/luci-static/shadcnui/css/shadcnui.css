@@ -181,7 +181,7 @@ hr {
 }
 
 .sidebar-section {
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.125rem;
 }
 
 .sidebar-section-label {
@@ -198,10 +198,10 @@ hr {
   display: flex;
   align-items: center;
   gap: 0.625rem;
-  padding: 0.45rem 0.75rem;
+  padding: 0.5rem 0.75rem;
   margin: 1px 0;
   border-radius: calc(var(--radius) - 2px);
-  font-size: 0.875rem;
+  font-size: 0.9375rem;  /* ~15px, matches shadcn original */
   color: hsl(var(--sidebar-foreground, var(--foreground)));
   cursor: pointer;
   user-select: none;
@@ -227,8 +227,8 @@ hr {
 
 .sidebar-link .icon,
 .sidebar-toggle .icon {
-  width: 16px;
-  height: 16px;
+  width: 17px;
+  height: 17px;
   flex-shrink: 0;
   opacity: 0.85;
   stroke-linecap: round;
@@ -237,25 +237,44 @@ hr {
 
 .sidebar-toggle .chevron {
   margin-left: auto;
-  width: 14px;
-  height: 14px;
-  transition: transform 150ms ease;
-  opacity: 0.6;
+  width: 15px;
+  height: 15px;
+  transition: transform 200ms ease;
+  opacity: 0.5;
 }
 
+/* Closed: chevron points right (default polyline 9 18 15 12 9 6) */
+/* Open: rotate to point down */
 .sidebar-section[data-open="true"] > .sidebar-toggle .chevron {
   transform: rotate(90deg);
 }
 
+/* Children wrapper with vertical guide line */
 .sidebar-children {
-  padding-left: 1.5rem;
   display: none;
+  position: relative;
+  padding-left: 2.25rem;  /* icon width (17px) + gap (10px) + indent */
+  margin-left: 0.875rem;  /* align line under icon center */
 }
-.sidebar-section[data-open="true"] > .sidebar-children { display: block; }
+
+.sidebar-children::before {
+  content: "";
+  position: absolute;
+  left: 0.85rem;          /* center under the icon */
+  top: 0.25rem;
+  bottom: 0.25rem;
+  width: 1px;
+  background: hsl(var(--border));
+  border-radius: 1px;
+}
+
+.sidebar-section[data-open="true"] > .sidebar-children {
+  display: block;
+}
 
 .sidebar-children .sidebar-link {
-  font-size: 0.825rem;
-  padding: 0.35rem 0.75rem;
+  font-size: 0.875rem;
+  padding: 0.35rem 0.5rem;
 }
 
 .sidebar-footer {

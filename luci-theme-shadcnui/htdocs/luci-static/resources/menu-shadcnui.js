@@ -89,6 +89,7 @@ var ICONS = {
 	'picoclaw':    'M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
 
 	/* Fallback */
+	'_chevron':    'M9 18l6-6-6-6',
 	'_default':    'M4 6h16M4 12h16M4 18h16'
 };
 
@@ -97,7 +98,7 @@ function makeSvg(name, cls) {
 	var NS = 'http://www.w3.org/2000/svg';
 	var svg = document.createElementNS(NS, 'svg');
 	svg.setAttribute('class', cls || 'icon');
-	svg.setAttribute('viewBox', '0 0 24 24');
+	svg.setAttribute('viewBox', '0 0 24 24');  /* camelCase — required for SVG */
 	svg.setAttribute('fill', 'none');
 	svg.setAttribute('stroke', 'currentColor');
 	svg.setAttribute('stroke-width', '1.75');
@@ -196,13 +197,7 @@ return baseclass.extend({
 				}, [
 					makeSvg(section.name, 'icon'),
 					E('span', {}, [ _(section.title) ]),
-					E('svg', {
-						'class':       'chevron',
-						'viewBox':     '0 0 24 24',
-						'fill':        'none',
-						'stroke':      'currentColor',
-						'stroke-width':'2'
-					}, [ E('polyline', { 'points': '9 18 15 12 9 6' }) ])
+					makeSvg('_chevron', 'chevron')
 				]);
 
 				var childrenWrap = E('div', { 'class': 'sidebar-children' });
