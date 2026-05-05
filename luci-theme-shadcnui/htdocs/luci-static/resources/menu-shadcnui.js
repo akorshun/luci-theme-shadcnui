@@ -118,11 +118,27 @@ return baseclass.extend({
 	},
 
 	render: function (tree) {
+		/* LuCI's handleSave/handleApply look for #maincontent to find forms.
+		   Wrap the rendered #view inside a #maincontent div if not present. */
+		if (!document.getElementById('maincontent')) {
+			var view = document.getElementById('view');
+			if (view) {
+				var mc = document.createElement('div');
+				mc.id = 'maincontent';
+				view.parentNode.insertBefore(mc, view);
+				mc.appendChild(view);
+			}
+		}
+
 		this.renderModeSwitcher(tree);
 		this.renderSidebarForActiveMode(tree);
 		this.renderBreadcrumb(tree);
 		this.renderTabMenu(tree);
+		this.fixApplyDropdown();
 	},
+
+	/* Fix LuCI's apply dropdown */
+	fixApplyDropdown: function () {},
 
 	/* --------------- Mode switcher (top-level) --------------- */
 
