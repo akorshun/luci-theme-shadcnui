@@ -1,6 +1,6 @@
 {
 	"admin/system/shadcnui-config": {
-		"title": "Theme",
+		"title": "shadcnui Theme Settings",
 		"order": 80,
 		"action": {
 			"type": "view",

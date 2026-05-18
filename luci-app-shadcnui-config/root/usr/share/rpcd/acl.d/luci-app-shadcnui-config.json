@@ -7,7 +7,8 @@
 				"/www/luci-static/shadcnui/img/background/": [ "list" ]
 			},
 			"ubus": {
-				"luci.shadcnui": [ "*" ]
+				"luci.shadcnui": [ "*" ],
+				"session": [ "access", "login" ]
 			}
 		},
 		"write": {

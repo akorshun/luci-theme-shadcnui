@@ -1,0 +1,188 @@
+# Chinese (Simplified) translation for luci-app-shadcnui-config
+# Copyright (C) 2026 bsatou
+# This file is distributed under the Apache License, Version 2.0.
+#
+msgid ""
+msgstr ""
+"Language: zh_Hans\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+# Page title and description
+msgid "Theme"
+msgstr "主题"
+
+msgid "shadcnui Theme Settings"
+msgstr "shadcnui 主题设置"
+
+msgid "Personalize the shadcnui LuCI theme. Changes preview live; click Save to persist."
+msgstr "个性化 shadcnui LuCI 主题。更改会实时预览；点击保存以持久化。"
+
+# Appearance section
+msgid "Appearance"
+msgstr "外观"
+
+msgid "Mode"
+msgstr "模式"
+
+msgid "Light, dark, or follow your operating system."
+msgstr "浅色、深色或跟随操作系统。"
+
+msgid "Follow system"
+msgstr "跟随系统"
+
+msgid "Light"
+msgstr "浅色"
+
+msgid "Dark"
+msgstr "深色"
+
+msgid "Base palette"
+msgstr "基础调色板"
+
+msgid "Neutral palette — same options as on ui.shadcn.com."
+msgstr "中性调色板 — 与 ui.shadcn.com 上的选项相同。"
+
+msgid "Accent color"
+msgstr "强调色"
+
+msgid "Overrides --primary. Hex picker writes the equivalent HSL string used by shadcn tokens."
+msgstr "覆盖 --primary。十六进制选择器写入 shadcn 令牌使用的等效 HSL 字符串。"
+
+msgid "Reset"
+msgstr "重置"
+
+msgid "Border radius"
+msgstr "边框圆角"
+
+msgid "Controls corner roundness across the theme."
+msgstr "控制整个主题的角落圆润度。"
+
+# Login background section
+msgid "Login background"
+msgstr "登录背景"
+
+msgid "Source"
+msgstr "来源"
+
+msgid "None"
+msgstr "无"
+
+msgid "No background image will be shown on the login page."
+msgstr "登录页面将不显示背景图片。"
+
+msgid "Custom URL"
+msgstr "自定义 URL"
+
+msgid "Local upload"
+msgstr "本地上传"
+
+msgid "Files are stored under /www/luci-static/shadcnui/img/background/."
+msgstr "文件存储在 /www/luci-static/shadcnui/img/background/ 下。"
+
+msgid "Bing daily"
+msgstr "必应每日"
+
+msgid "Requires internet access from the router."
+msgstr "需要路由器能够访问互联网。"
+
+msgid "Unsplash"
+msgstr "Unsplash 图库"
+
+msgid "Access Key"
+msgstr "访问密钥"
+
+msgid "Get a free Demo key at unsplash.com/developers."
+msgstr "在 unsplash.com/developers 获取免费演示密钥。"
+
+msgid "Query"
+msgstr "搜索词"
+
+msgid "Fetch random Unsplash"
+msgstr "获取随机 Unsplash 图片"
+
+msgid "Wallhaven"
+msgstr "Wallhaven 壁纸"
+
+msgid "API Key"
+msgstr "API 密钥"
+
+msgid "Optional. Required only for NSFW or rate-limit relief."
+msgstr "可选。仅在需要 NSFW 内容或解除速率限制时需要。"
+
+msgid "Fetch random Wallhaven"
+msgstr "获取随机 Wallhaven 图片"
+
+# Palette names
+msgid "Zinc"
+msgstr "锌灰"
+
+msgid "Slate"
+msgstr "青灰"
+
+msgid "Stone"
+msgstr "石灰"
+
+msgid "Gray"
+msgstr "灰色"
+
+msgid "Neutral"
+msgstr "中性"
+
+# Accent input placeholder
+msgid "e.g. 240 5.9% 10%  (leave empty for base default)"
+msgstr "例如: 240 5.9% 10% (留空使用基础默认值)"
+
+# Query placeholders
+msgid "nature"
+msgstr "自然"
+
+msgid "nature, mountains, abstract..."
+msgstr "自然, 山脉, 抽象..."
+
+msgid "minimal"
+msgstr "简约"
+
+msgid "minimal, cyberpunk, anime..."
+msgstr "简约, 赛博朋克, 动漫..."
+
+# Wallhaven key placeholder
+msgid "*** (optional, for NSFW token)"
+msgstr "*** (可选, NSFW 令牌)"
+
+# Buttons and messages
+msgid "Save"
+msgstr "保存"
+
+msgid "Settings saved. Reload the page to apply everywhere."
+msgstr "设置已保存。重新加载页面以在所有地方生效。"
+
+msgid "Failed to save settings."
+msgstr "保存设置失败。"
+
+msgid "Fetch today's Bing image"
+msgstr "获取今日必应图片"
+
+msgid "Bing image loaded."
+msgstr "必应图片已加载。"
+
+msgid "Failed to fetch Bing image."
+msgstr "获取必应图片失败。"
+
+msgid "Unsplash image loaded"
+msgstr "Unsplash 图片已加载"
+
+msgid "Failed to fetch Unsplash image."
+msgstr "获取 Unsplash 图片失败。"
+
+msgid "Wallhaven image loaded."
+msgstr "Wallhaven 图片已加载。"
+
+msgid "Failed to fetch Wallhaven image."
+msgstr "获取 Wallhaven 图片失败。"
+
+msgid "Uploaded to %s"
+msgstr "已上传到 %s"
+
+msgid "Upload failed: %s"
+msgstr "上传失败：%s"

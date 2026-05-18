@@ -166,11 +166,11 @@ return view.extend({
 		});
 
 		var baseSel = select('base', [
-			[ 'zinc',    'Zinc' ],
-			[ 'slate',   'Slate' ],
-			[ 'stone',   'Stone' ],
-			[ 'gray',    'Gray' ],
-			[ 'neutral', 'Neutral' ]
+			[ 'zinc',    _('Zinc') ],
+			[ 'slate',   _('Slate') ],
+			[ 'stone',   _('Stone') ],
+			[ 'gray',    _('Gray') ],
+			[ 'neutral', _('Neutral') ]
 		], state.base);
 		baseSel.addEventListener('change', function (ev) {
 			state.base = ev.target.value;
@@ -185,7 +185,7 @@ return view.extend({
 		});
 		var accentText = E('input', {
 			type:        'text',
-			placeholder: 'e.g. 240 5.9% 10%  (leave empty for base default)',
+			placeholder: _('e.g. 240 5.9% 10%  (leave empty for base default)'),
 			value:       state.accent,
 			style:       'flex:1'
 		});
@@ -259,12 +259,12 @@ return view.extend({
 
 		var unsplashQueryInp = E('input', {
 			type: 'text',
-			value: unsplashCfg.query || 'nature',
-			placeholder: 'nature, mountains, abstract...'
+			value: unsplashCfg.query || _('nature'),
+			placeholder: _('nature, mountains, abstract...')
 		});
 
 		var wallhavenKeyInp = E('input', {
-			type: 'password', placeholder: '*** (optional, for SFW token)',
+			type: 'password', placeholder: _('*** (optional, for NSFW token)'),
 			value: wallhavenCfg.api_key === '***' ? '' : (wallhavenCfg.api_key || '')
 		});
 		wallhavenKeyInp.addEventListener('change', function (ev) {
@@ -273,8 +273,8 @@ return view.extend({
 
 		var wallhavenQueryInp = E('input', {
 			type: 'text',
-			value: wallhavenCfg.query || 'minimal',
-			placeholder: 'minimal, cyberpunk, anime...'
+			value: wallhavenCfg.query || _('minimal'),
+			placeholder: _('minimal, cyberpunk, anime...')
 		});
 
 		// Fetch buttons
