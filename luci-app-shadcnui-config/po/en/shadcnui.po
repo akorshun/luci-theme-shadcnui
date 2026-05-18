@@ -1,0 +1,188 @@
+# English translation for luci-app-shadcnui-config
+# Copyright (C) 2026 bsatou
+# This file is distributed under the Apache License, Version 2.0.
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Page title and description
+msgid "Theme"
+msgstr "Theme"
+
+msgid "shadcnui Theme Settings"
+msgstr "shadcnui Theme Settings"
+
+msgid "Personalize the shadcnui LuCI theme. Changes preview live; click Save to persist."
+msgstr "Personalize the shadcnui LuCI theme. Changes preview live; click Save to persist."
+
+# Appearance section
+msgid "Appearance"
+msgstr "Appearance"
+
+msgid "Mode"
+msgstr "Mode"
+
+msgid "Light, dark, or follow your operating system."
+msgstr "Light, dark, or follow your operating system."
+
+msgid "Follow system"
+msgstr "Follow system"
+
+msgid "Light"
+msgstr "Light"
+
+msgid "Dark"
+msgstr "Dark"
+
+msgid "Base palette"
+msgstr "Base palette"
+
+msgid "Neutral palette — same options as on ui.shadcn.com."
+msgstr "Neutral palette — same options as on ui.shadcn.com."
+
+msgid "Accent color"
+msgstr "Accent color"
+
+msgid "Overrides --primary. Hex picker writes the equivalent HSL string used by shadcn tokens."
+msgstr "Overrides --primary. Hex picker writes the equivalent HSL string used by shadcn tokens."
+
+msgid "Reset"
+msgstr "Reset"
+
+msgid "Border radius"
+msgstr "Border radius"
+
+msgid "Controls corner roundness across the theme."
+msgstr "Controls corner roundness across the theme."
+
+# Login background section
+msgid "Login background"
+msgstr "Login background"
+
+msgid "Source"
+msgstr "Source"
+
+msgid "None"
+msgstr "None"
+
+msgid "No background image will be shown on the login page."
+msgstr "No background image will be shown on the login page."
+
+msgid "Custom URL"
+msgstr "Custom URL"
+
+msgid "Local upload"
+msgstr "Local upload"
+
+msgid "Files are stored under /www/luci-static/shadcnui/img/background/."
+msgstr "Files are stored under /www/luci-static/shadcnui/img/background/."
+
+msgid "Bing daily"
+msgstr "Bing daily"
+
+msgid "Requires internet access from the router."
+msgstr "Requires internet access from the router."
+
+msgid "Unsplash"
+msgstr "Unsplash"
+
+msgid "Access Key"
+msgstr "Access Key"
+
+msgid "Get a free Demo key at unsplash.com/developers."
+msgstr "Get a free Demo key at unsplash.com/developers."
+
+msgid "Query"
+msgstr "Query"
+
+msgid "Fetch random Unsplash"
+msgstr "Fetch random Unsplash"
+
+msgid "Wallhaven"
+msgstr "Wallhaven"
+
+msgid "API Key"
+msgstr "API Key"
+
+msgid "Optional. Required only for NSFW or rate-limit relief."
+msgstr "Optional. Required only for NSFW or rate-limit relief."
+
+msgid "Fetch random Wallhaven"
+msgstr "Fetch random Wallhaven"
+
+# Palette names
+msgid "Zinc"
+msgstr "Zinc"
+
+msgid "Slate"
+msgstr "Slate"
+
+msgid "Stone"
+msgstr "Stone"
+
+msgid "Gray"
+msgstr "Gray"
+
+msgid "Neutral"
+msgstr "Neutral"
+
+# Accent input placeholder
+msgid "e.g. 240 5.9% 10%  (leave empty for base default)"
+msgstr "e.g. 240 5.9% 10%  (leave empty for base default)"
+
+# Query placeholders
+msgid "nature"
+msgstr "nature"
+
+msgid "nature, mountains, abstract..."
+msgstr "nature, mountains, abstract..."
+
+msgid "minimal"
+msgstr "minimal"
+
+msgid "minimal, cyberpunk, anime..."
+msgstr "minimal, cyberpunk, anime..."
+
+# Wallhaven key placeholder
+msgid "*** (optional, for NSFW token)"
+msgstr "*** (optional, for NSFW token)"
+
+# Buttons and messages
+msgid "Save"
+msgstr "Save"
+
+msgid "Settings saved. Reload the page to apply everywhere."
+msgstr "Settings saved. Reload the page to apply everywhere."
+
+msgid "Failed to save settings."
+msgstr "Failed to save settings."
+
+msgid "Fetch today's Bing image"
+msgstr "Fetch today's Bing image"
+
+msgid "Bing image loaded."
+msgstr "Bing image loaded."
+
+msgid "Failed to fetch Bing image."
+msgstr "Failed to fetch Bing image."
+
+msgid "Unsplash image loaded"
+msgstr "Unsplash image loaded"
+
+msgid "Failed to fetch Unsplash image."
+msgstr "Failed to fetch Unsplash image."
+
+msgid "Wallhaven image loaded."
+msgstr "Wallhaven image loaded."
+
+msgid "Failed to fetch Wallhaven image."
+msgstr "Failed to fetch Wallhaven image."
+
+msgid "Uploaded to %s"
+msgstr "Uploaded to %s"
+
+msgid "Upload failed: %s"
+msgstr "Upload failed: %s"

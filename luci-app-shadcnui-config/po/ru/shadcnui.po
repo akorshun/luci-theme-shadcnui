@@ -1,0 +1,188 @@
+# Russian translation for luci-app-shadcnui-config
+# Copyright (C) 2026 bsatou
+# This file is distributed under the Apache License, Version 2.0.
+#
+msgid ""
+msgstr ""
+"Language: ru\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+# Page title and description
+msgid "Theme"
+msgstr "Тема"
+
+msgid "shadcnui Theme Settings"
+msgstr "Настройки темы shadcnui"
+
+msgid "Personalize the shadcnui LuCI theme. Changes preview live; click Save to persist."
+msgstr "Персонализируйте тему shadcnui LuCI. Изменения отображаются в реальном времени; нажмите Сохранить для применения."
+
+# Appearance section
+msgid "Appearance"
+msgstr "Внешний вид"
+
+msgid "Mode"
+msgstr "Режим"
+
+msgid "Light, dark, or follow your operating system."
+msgstr "Светлый, темный или следовать операционной системе."
+
+msgid "Follow system"
+msgstr "Следовать системе"
+
+msgid "Light"
+msgstr "Светлый"
+
+msgid "Dark"
+msgstr "Темный"
+
+msgid "Base palette"
+msgstr "Базовая палитра"
+
+msgid "Neutral palette — same options as on ui.shadcn.com."
+msgstr "Нейтральная палитра — те же параметры, что и на ui.shadcn.com."
+
+msgid "Accent color"
+msgstr "Акцентный цвет"
+
+msgid "Overrides --primary. Hex picker writes the equivalent HSL string used by shadcn tokens."
+msgstr "Переопределяет --primary. Hex-выборчик записывает эквивалентную HSL-строку, используемую shadcn токенами."
+
+msgid "Reset"
+msgstr "Сброс"
+
+msgid "Border radius"
+msgstr "Радиус границы"
+
+msgid "Controls corner roundness across the theme."
+msgstr "Управляет скруглением углов в теме."
+
+# Login background section
+msgid "Login background"
+msgstr "Фон входа"
+
+msgid "Source"
+msgstr "Источник"
+
+msgid "None"
+msgstr "Нет"
+
+msgid "No background image will be shown on the login page."
+msgstr "На странице входа не будет показано фоновое изображение."
+
+msgid "Custom URL"
+msgstr "Пользовательский URL"
+
+msgid "Local upload"
+msgstr "Локальная загрузка"
+
+msgid "Files are stored under /www/luci-static/shadcnui/img/background/."
+msgstr "Файлы хранятся в /www/luci-static/shadcnui/img/background/."
+
+msgid "Bing daily"
+msgstr "Bing ежедневно"
+
+msgid "Requires internet access from the router."
+msgstr "Требуется доступ к интернету от роутера."
+
+msgid "Unsplash"
+msgstr "Unsplash"
+
+msgid "Access Key"
+msgstr "Ключ доступа"
+
+msgid "Get a free Demo key at unsplash.com/developers."
+msgstr "Получите бесплатный демо-ключ на unsplash.com/developers."
+
+msgid "Query"
+msgstr "Запрос"
+
+msgid "Fetch random Unsplash"
+msgstr "Получить случайное Unsplash"
+
+msgid "Wallhaven"
+msgstr "Wallhaven"
+
+msgid "API Key"
+msgstr "API ключ"
+
+msgid "Optional. Required only for NSFW or rate-limit relief."
+msgstr "Опционально. Требуется только для NSFW или снятия ограничений."
+
+msgid "Fetch random Wallhaven"
+msgstr "Получить случайное Wallhaven"
+
+# Palette names
+msgid "Zinc"
+msgstr "Цинк"
+
+msgid "Slate"
+msgstr "Сланец"
+
+msgid "Stone"
+msgstr "Камень"
+
+msgid "Gray"
+msgstr "Серый"
+
+msgid "Neutral"
+msgstr "Нейтральный"
+
+# Accent input placeholder
+msgid "e.g. 240 5.9% 10%  (leave empty for base default)"
+msgstr "например, 240 5.9% 10% (оставьте пустым для базового значения)"
+
+# Query placeholders
+msgid "nature"
+msgstr "природа"
+
+msgid "nature, mountains, abstract..."
+msgstr "природа, горы, абстракция..."
+
+msgid "minimal"
+msgstr "минимализм"
+
+msgid "minimal, cyberpunk, anime..."
+msgstr "минимализм, киберпанк, аниме..."
+
+# Wallhaven key placeholder
+msgid "*** (optional, for NSFW token)"
+msgstr "*** (опционально, для NSFW токена)"
+
+# Buttons and messages
+msgid "Save"
+msgstr "Сохранить"
+
+msgid "Settings saved. Reload the page to apply everywhere."
+msgstr "Настройки сохранены. Перезагрузите страницу для применения везде."
+
+msgid "Failed to save settings."
+msgstr "Не удалось сохранить настройки."
+
+msgid "Fetch today's Bing image"
+msgstr "Получить изображение Bing на сегодня"
+
+msgid "Bing image loaded."
+msgstr "Изображение Bing загружено."
+
+msgid "Failed to fetch Bing image."
+msgstr "Не удалось получить изображение Bing."
+
+msgid "Unsplash image loaded"
+msgstr "Изображение Unsplash загружено"
+
+msgid "Failed to fetch Unsplash image."
+msgstr "Не удалось получить изображение Unsplash."
+
+msgid "Wallhaven image loaded."
+msgstr "Изображение Wallhaven загружено."
+
+msgid "Failed to fetch Wallhaven image."
+msgstr "Не удалось получить изображение Wallhaven."
+
+msgid "Uploaded to %s"
+msgstr "Загружено в %s"
+
+msgid "Upload failed: %s"
+msgstr "Ошибка загрузки: %s"
